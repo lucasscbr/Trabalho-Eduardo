@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Sistema_Acadêmico_by_Lucas_and_Roger
 {
@@ -14,14 +15,24 @@ namespace Sistema_Acadêmico_by_Lucas_and_Roger
             public string Nome,Sigla;          
         }
 
-         static Disciplina[] Disciplinas = new Disciplina[5]; //vetor disciplina de no max 5 disciplinas
+        struct Aluno //estrutura do Aluno
+        {
+            public int Código;
+            public string Nome;
+            public float Nota;
+        }
 
+        static Disciplina[] Disciplinas = new Disciplina[5]; //vetor disciplina de no max 5 disciplinas
+
+        static Aluno[] Alunos = new Aluno[40]; //vetor Aluno de no max 40 Alunos
+
+        //Parte Disciplina
         static void CadastrarDisciplinas() //cadastra a disciplina PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
         {
             int qtde=0;
             char resp;
 
-            for (int i = 0; i <= Disciplinas.Length; i++)
+            for (int i = 0; i < Disciplinas.Length; i++)
             {
                 do
                 {
@@ -47,7 +58,7 @@ namespace Sistema_Acadêmico_by_Lucas_and_Roger
                         try  //tente
                         {
                             Console.WriteLine($"Digite um Código para a disciplina({i + 1}) (Maior que 0): ");
-                            Disciplinas[i].Código = Convert.ToInt16(Console.ReadLine().Trim());
+                            Disciplinas[i].Código = Convert.ToInt16(Console.ReadLine().Trim()); //CUIDADO ELE CORTA OS 0 TB
                         }
                         catch  //se digitar algo sem ser int
                         {
@@ -64,9 +75,65 @@ namespace Sistema_Acadêmico_by_Lucas_and_Roger
                 resp = Console.ReadLine().ToUpper().Trim()[0];
 
                 if (resp != 'S')
+                {
+                    string conteudo;
+                    for (int k = 0; k < qtde; k++)
+                    {
+                        conteudo = Disciplinas[k].Nome + "|" + Disciplinas[k].Sigla + "|" + Disciplinas[k].Código + Environment.NewLine;
+                        File.WriteAllText("DisciplinaFile.txt", conteudo);
+                    }
                     break;
+                }
+                    
             }
-        }                   
+        }
+
+        // Parte aluno
+        static void CadastrarAlunos() //cadastra alunos PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
+        {
+            int qtde = 0;
+            char resp;
+
+            for (int i = 0; i < Alunos.Length; i++)
+            {
+                do
+                {
+                    Console.WriteLine($"Digite o Nome do Aluno({i + 1}) (Max 40 Alunos): ");
+                    Alunos[i].Nome = Console.ReadLine().Trim();
+
+                } while (Alunos[i].Nome.Length == 0 || Alunos[i].Nome.Length > 30);
+
+                do
+                {
+                    bool verificar;
+
+                    do
+                    {
+                        verificar = false;
+                        try  //tente
+                        {
+                            Console.WriteLine($"Digite um Código para o Aluno({i + 1}) (Maior que 0): ");
+                            Alunos[i].Código = Convert.ToInt16(Console.ReadLine().Trim());
+                        }
+                        catch  //se digitar algo sem ser int
+                        {
+                            Console.WriteLine("Por favor digite somente números inteiros !");
+                            verificar = true;
+                        }
+                    } while (verificar == true);
+
+                } while (Alunos[i].Código < 1);
+
+                qtde++;
+
+                Console.WriteLine("Deseja cadastrar mais uma disciplina? (S/N)");
+                resp = Console.ReadLine().ToUpper().Trim()[0];
+
+                if (resp != 'S')
+                    break;
+
+            }
+        }
 
         static void Main(string[] args)
         {
