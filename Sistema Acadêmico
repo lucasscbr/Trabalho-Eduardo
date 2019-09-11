@@ -9,90 +9,96 @@ namespace Sistema_Acadêmico_by_Lucas_and_Roger
 {
     class Program
     {
-        struct Disciplina //estrutura da disciplina
-        {
-            public int Código;
-            public string Nome,Sigla;          
-        }
-
         struct Aluno //estrutura do Aluno
         {
             public int Código;
             public string Nome;
-            public float Nota;
         }
+        struct Disciplina //estrutura da disciplina
+        {
+            public int Código;
+            public string Nome, Sigla;
+            
+        }
+             
 
         static Disciplina[] Disciplinas = new Disciplina[5]; //vetor disciplina de no max 5 disciplinas
 
         static Aluno[] Alunos = new Aluno[40]; //vetor Aluno de no max 40 Alunos
 
         //Parte Disciplina
+
+        static int qtdeDisciplinas = 0;
         static void CadastrarDisciplinas() //cadastra a disciplina PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
-        {
-            int qtde=0;
+        {          
             char resp;
+            string conteudo;
 
             for (int i = 0; i < Disciplinas.Length; i++)
             {
                 do
                 {
-                    Console.WriteLine($"Digite o Nome da disciplina({i + 1}) (Max 5 disciplinas): ");
-                    Disciplinas[i].Nome = Console.ReadLine().Trim();
+                    
+                    
+                        Console.WriteLine($"Digite o Nome da disciplina({i + 1}) (Max 5 disciplinas): ");
+                        Disciplinas[i].Nome = Console.ReadLine().Trim();
 
-                } while (Disciplinas[i].Nome.Length == 0 || Disciplinas[i].Nome.Length > 30);
-
-                do
-                {
-                    Console.WriteLine($"Digite uma Sigla para a disciplina({i+1}) (Max 4 caracteres): ");
-                    Disciplinas[i].Sigla = Console.ReadLine().Trim();
-
-                } while (Disciplinas[i].Sigla.Length == 0 || Disciplinas[i].Sigla.Length > 4);
-
-                do
-                {
-                    bool verificar;
+                    } while (Disciplinas[i].Nome.Length == 0 || Disciplinas[i].Nome.Length > 30);
 
                     do
                     {
-                        verificar = false;            
-                        try  //tente
-                        {
-                            Console.WriteLine($"Digite um Código para a disciplina({i + 1}) (Maior que 0): ");
-                            Disciplinas[i].Código = Convert.ToInt16(Console.ReadLine().Trim()); //CUIDADO ELE CORTA OS 0 TB
-                        }
-                        catch  //se digitar algo sem ser int
-                        {
-                            Console.WriteLine("Por favor digite somente números inteiros !");
-                            verificar = true;
-                        }
-                    } while (verificar == true);
+                        Console.WriteLine($"Digite uma Sigla para a disciplina({i + 1}) (Max 4 caracteres): ");
+                        Disciplinas[i].Sigla = Console.ReadLine().Trim();
 
-                } while (Disciplinas[i].Código < 1);
+                    } while (Disciplinas[i].Sigla.Length == 0 || Disciplinas[i].Sigla.Length > 4);
 
-                qtde++;
-
-                Console.WriteLine("Deseja cadastrar mais uma disciplina? (S/N)");
-                resp = Console.ReadLine().ToUpper().Trim()[0];
-
-                if (resp != 'S')
-                {
-                    string conteudo;
-                    for (int k = 0; k < qtde; k++)
+                    do
                     {
-                        conteudo = Disciplinas[k].Nome + "|" + Disciplinas[k].Sigla + "|" + Disciplinas[k].Código + Environment.NewLine;
-                        File.WriteAllText("DisciplinaFile.txt", conteudo);
+                        bool verificar;
+
+                        do
+                        {
+                            verificar = false;
+                            try  //tente
+                            {
+                                Console.WriteLine($"Digite um Código para a disciplina({i + 1}) (Maior que 0): ");
+                                Disciplinas[i].Código = Convert.ToInt16(Console.ReadLine().Trim()); //CUIDADO ELE CORTA OS 0 TB
+                            }
+                            catch  //se digitar algo sem ser int
+                            {
+                                Console.WriteLine("Por favor digite somente números inteiros !");
+                                verificar = true;
+                            }
+                        } while (verificar == true);
+
+                    } while (Disciplinas[i].Código < 1);
+
+                    qtdeDisciplinas++;
+
+                    Console.WriteLine("Deseja cadastrar mais uma disciplina? (S/N)");
+                    resp = Console.ReadLine().ToUpper().Trim()[0];
+
+                if (resp == 'N')
+                {
+                    for (int t = 0; t < qtdeDisciplinas; t++)
+                    {
+                        conteudo = Disciplinas[t].Nome + "|" + Disciplinas[t].Sigla + "|" + Disciplinas[t].Código + Environment.NewLine;
+                        File.AppendAllText("Disciplinas.txt", conteudo, Encoding.UTF8);
                     }
                     break;
                 }
+                    
+                
                     
             }
         }
 
         // Parte aluno
+        static int qtdeAlunos = 0;
         static void CadastrarAlunos() //cadastra alunos PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
         {
-            int qtde = 0;
             char resp;
+            string conteudo;
 
             for (int i = 0; i < Alunos.Length; i++)
             {
@@ -124,22 +130,133 @@ namespace Sistema_Acadêmico_by_Lucas_and_Roger
 
                 } while (Alunos[i].Código < 1);
 
-                qtde++;
+                qtdeAlunos++;
 
-                Console.WriteLine("Deseja cadastrar mais uma disciplina? (S/N)");
+                Console.WriteLine("Deseja cadastrar mais um Aluno? (S/N)");
                 resp = Console.ReadLine().ToUpper().Trim()[0];
 
-                if (resp != 'S')
+                if (resp == 'N')
+                {
+                    for (int t = 0; t < qtdeDisciplinas; t++)
+                    {
+                        conteudo = Alunos[t].Nome + "|" + Alunos[t].Código + Environment.NewLine;
+                        File.AppendAllText("Alunos.txt", conteudo, Encoding.UTF8);
+                    }
                     break;
+                }
 
             }
         }
 
+        //Lançar notas de acordo com a disciplina
+        static void LançarNotasDisciplina()
+        {
+            string conteudos, resp;
+            double Notas;
+            bool verificador;
+            int resposta = 0;
+            string disciplinaE ="";
+
+            Console.WriteLine("Dados carregados do arquivo:");
+            if (File.Exists("Disciplinas.txt"))
+            {
+                string[] linhas = File.ReadAllLines("Disciplinas.txt", Encoding.UTF8);
+                string[] linhasA = File.ReadAllLines("Alunos.txt", Encoding.UTF8);
+
+                for (int n = 0; n < linhas.Length; n++)
+                    Console.WriteLine(linhas[n].ToUpper());
+
+                do
+                {
+                    verificador = false;
+                    try
+                    {
+                        Console.WriteLine("Digite o código de uma disciplina: ");
+                        resposta = Convert.ToInt16(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Digite apenas números inteiros! ");
+                        verificador = true;
+                    }
+
+                    resp = Convert.ToString(resposta);
+                    for (int x = 0; x < linhas.Length; x++)
+                    {
+                        if (linhas[x].IndexOf(resp) != -1)
+                        {
+                            disciplinaE = linhas[x].Substring(0, linhas[x].IndexOf('|'));
+                            verificador = false;
+                            break;
+                        }
+                        else
+                            verificador = true;
+                    }
+
+                    if (disciplinaE == "")
+                        verificador = true;
+
+                } while (verificador == true);
+
+                  for (int i = 0; i < linhasA.Length; i++) 
+                    {
+                        do
+                        {
+                            verificador = false;
+                            Console.WriteLine($"{linhasA[i].ToUpper()} Digite uma nota entre (0/10)");
+                            Notas = Convert.ToDouble(Console.ReadLine());
+
+                            if (Notas >= 0 && Notas <= 10)
+                            {
+                                Console.WriteLine("Nota Cadastrada");                                                              
+                                conteudos = disciplinaE + "|" + linhasA[i].Substring(0,linhasA[i].IndexOf('|')) + "|" + Notas + Environment.NewLine;
+                                File.AppendAllText("Notas.txt", conteudos, Encoding.UTF8);
+                                
+                            }
+                            
+
+                        } while (verificador == true);
+                    }
+               
+            }
+        }
         static void Main(string[] args)
         {
+            
+            int resp = 0;
+            bool verificar;
+
             Console.WriteLine("Bem Vindo ao Sistema Acadêmico");
 
-            CadastrarDisciplinas();
+            do
+            {
+                do
+                {
+                     verificar = false;
+                    try
+                    {
+                        Console.WriteLine("Oquê você deseja fazer? \n1- Cadastrar Disciplina \n2- Cadastrar aluno \n3- Lançar notas por disciplina \n4- Sair");
+                        resp = Convert.ToInt16(Console.ReadLine().Trim());
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Digite apenas numeros inteiros entre 1 e 4!");
+                        verificar = true;
+                    }
+                } while (verificar == true);
+
+
+                if (resp == 1)
+                    CadastrarDisciplinas();
+                else if (resp == 2)
+                    CadastrarAlunos();
+                else if (resp == 3)
+                    LançarNotasDisciplina();
+
+
+
+            } while (resp != 4);
+
 
             Console.ReadLine();
         }
