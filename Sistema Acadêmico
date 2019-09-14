@@ -161,7 +161,7 @@ namespace N1
         // Lançamento de notas
         static void LancarNotas()
         {
-            int encontrada ;
+            int encontrada;
             encontrada = lançarNotasEncontrarDisciplina();
 
             Console.Write($"\n\nDisciplina escolhida: {encontrada}\n\n");
@@ -388,7 +388,7 @@ namespace N1
         {
             ConsoleColor cor = Console.ForegroundColor;
             double soma;
-            
+
 
             for (int x = 0; x < qtdAluno; x++)
             {
@@ -414,7 +414,7 @@ namespace N1
             {
                 if (Alunos[i].media >= 5)
                     Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} - Aprovado");
-                else if(Alunos[i].media < 5)
+                else if (Alunos[i].media < 5)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} - Reprovado");
@@ -439,7 +439,6 @@ namespace N1
             Console.ReadKey();
             VoltarMenu();
         }
-
 
 
         #region Método Cadastro de Disciplinas
@@ -499,6 +498,16 @@ namespace N1
                     break;
                 }
             }
+
+            if (qtdDisciplina == 5)
+            {
+                Console.WriteLine("ERROR:Limite de cadastro atingido");
+                Console.ReadKey();
+                Salvar();
+                VoltarMenu();
+            }
+
+
         }
         #endregion
 
