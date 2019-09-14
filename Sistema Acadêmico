@@ -461,18 +461,25 @@ namespace N1
         {
             ConsoleColor cor = Console.ForegroundColor;
             double soma;
+            
 
             for (int x = 0; x < qtdAluno; x++)
             {
                 soma = 0;
+                int cont = 0;
 
                 for (int j = 0; j < qtdNota; j++)
                 {
                     if (Alunos[x].Codigo == Notas[j].CodAluno)
+                    {
                         soma += Notas[j].NotaAluno;
+                        cont++;
+                    }
                 }
 
                 Alunos[x].media = soma / qtdDisciplina;
+                if (cont++ < qtdDisciplina)
+                    Alunos[x].media = 1;
             }
 
 
@@ -480,7 +487,7 @@ namespace N1
             {
                 if (Alunos[i].media >= 5)
                     Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} - Aprovado");
-                else
+                else if(Alunos[i].media < 5)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} - Reprovado");
