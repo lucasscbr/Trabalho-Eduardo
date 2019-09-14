@@ -340,6 +340,7 @@ namespace N1
                 case 2:
                     break;
                 case 3:
+                    MapaDeNotas();
                     break;
             }
         }
@@ -375,6 +376,11 @@ namespace N1
             {
                 if (Notas[x].CodAluno == codAluno && Notas[x].CodDisciplina == codDisciplina)
                 {
+                    if (Notas[x].NotaAluno < 5)
+                    {                      
+                        return Notas[x].NotaAluno.ToString();
+                    }
+                    else
                     return Notas[x].NotaAluno.ToString();
                 }
             }
@@ -440,6 +446,76 @@ namespace N1
             VoltarMenu();
         }
 
+        static void MapaDeNotas()
+        {
+            string vazio = "";
+            string linha = $"{vazio.PadLeft(42)}";
+
+            Console.Clear();
+            Console.Write("CONSULTA DE NOTAS: \n\nMapa de notas");
+
+            for (int i = 0; i < qtdDisciplina; i++)
+                linha += $"{Disciplinas[i].Sigla.PadLeft(5)}";
+
+            Console.WriteLine($"\n{linha}");
+
+            for (int x = 0; x < qtdAluno; x++)
+            {
+                ConsoleColor cor = Console.ForegroundColor;
+                linha = $"{Alunos[x].Codigo.ToString().PadRight(8)} - {Alunos[x].Nome.PadRight(30)}";
+                for (int i = 0; i < qtdDisciplina; i++)
+                    if (NotaConsultada(x, i) != "-")
+                    {
+                        if (int.Parse(NotaConsultada(x, i)) < 5)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            linha += $"{NotaConsultada(x, i).ToString().PadLeft(5)}";
+                        }
+                        else
+                            linha += $"{NotaConsultada(x, i).ToString().PadLeft(5)}";
+                    }
+                    else
+                        linha += $"{NotaConsultada(x, i).ToString().PadLeft(5)}";
+                Console.WriteLine(linha);
+                Console.ForegroundColor = cor;
+
+            }
+
+            Console.ReadLine();
+            VoltarMenu();
+        }
+        /// <summary>
+        /// Verifica se o código da disciplina digitado pelo usuário ja está cadastrado.
+        /// </summary>
+        /// <param name="codigoDisciplina"></param>
+        /// <returns></returns>
+        static int CodigoIgualDisciplina(int codigoDisciplina)
+        {
+            for (int x = 0; x < qtdDisciplina; x++) 
+            {
+                if (codigoDisciplina == Disciplinas[x].Codigo)
+                {
+                    Console.WriteLine("Não repita códigos!");
+                    return 0;
+                }
+            }
+
+            return codigoDisciplina;
+        }
+
+        static int CodigoIgualAluno(int codigoAluno)
+        {
+            for (int x = 0; x < qtdAluno; x++)
+            {
+                if (codigoAluno == Alunos[x].Codigo)
+                {
+                    Console.WriteLine("Não repita códigos!");
+                    return 0;
+                }
+            }
+
+            return codigoAluno;
+        }
 
         #region Método Cadastro de Disciplinas
         static void CadastrarDisciplinas() //cadastra a disciplina PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
@@ -483,6 +559,9 @@ namespace N1
                             Console.WriteLine("Por favor digite somente números inteiros !");
                         }
                     } while (true);
+
+                   Disciplinas[i].Codigo = CodigoIgualDisciplina(Disciplinas[i].Codigo);
+
                 } while (Disciplinas[i].Codigo < 1);
                 qtde++;
 
@@ -552,6 +631,8 @@ namespace N1
                         }
 
                     } while (true);
+
+                    Alunos[i].Codigo = CodigoIgualAluno(Alunos[i].Codigo);
 
                 } while (Alunos[i].Codigo < 1);
 
