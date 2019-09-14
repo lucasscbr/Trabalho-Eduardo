@@ -20,6 +20,7 @@ namespace N1
         {
             public int Codigo;
             public string Nome;
+            public double media;
         }
 
         struct Nota
@@ -63,7 +64,7 @@ namespace N1
             Console.Clear();
             Console.Write("--- SISTEMA DE DIGITAÇÃO DE NOTAS --- \n\nBem vindo! Digite uma opção: " +
                 "\n\n(1) Desenvolvedores \n(2) Cadastro de Disciplinas \n(3) Cadastro de alunos \n(4) Lançamento de notas por disciplina" +
-                "\n(5) Alteração de nota do aluno \n(6) Sair");
+                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Sair");
 
             do
             {
@@ -71,7 +72,7 @@ namespace N1
                 {
                     Console.Write("\n\nSua opção: ");
                     opcao = int.Parse(Console.ReadLine());
-                    if (opcao > 0 && opcao <= 6)
+                    if (opcao > 0 && opcao <= 8)
                         break;
                 }
                 catch
@@ -97,7 +98,12 @@ namespace N1
                     AlterarNota();
                     break;
                 case 6:
-                    // Sair
+                    ConsultaNotas();
+                    break;
+                case 7:
+                    ConsultarSituação();
+                    break;
+                case 8:
                     break;
             }
         }
@@ -376,6 +382,115 @@ namespace N1
 
         }
 
+        #region Método Consulta de Notas
+        static void ConsultaNotas()
+        {
+            int resp = 0;
+            Console.Clear();
+            Console.Write("CONSULTA DE NOTAS: \n\n(1) Por aluno \n(2) Por disciplina \n(3) Mapa de notas \n\nSua opção: ");
+
+            do
+            {
+                try
+                {
+                    resp = int.Parse(Console.ReadLine());
+                    if (resp > 0 && resp <= 3)
+                        break;
+                    else
+                        Console.WriteLine("\nPor favor, digite somente números inteiros de 1 a 3\n");
+                }
+                catch
+                {
+                    Console.WriteLine("\nPor favor, digite somente números inteiros de 1 a 3\n");
+                }
+            } while (true);
+
+            switch (resp)
+            {
+                case 1:
+                    ConsultaPorAluno();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
+        }
+
+        static void ConsultaPorAluno()
+        {
+            int posicaoAluno = 0;
+
+            Console.Clear();
+            Console.Write("CONSULTA DE NOTAS: \n\nConsulta por aluno \n\n");
+
+            posicaoAluno = VerificarIgualdadeCodigoAluno();
+
+            Console.WriteLine($"Nome: {Alunos[posicaoAluno]}\n");
+            for (int i = 0; i < qtdDisciplina; i++)
+            {
+                Console.WriteLine($"{Disciplinas[i].Nome.PadRight(30)}: {NotaConsultada(Alunos[posicaoAluno].Codigo, Disciplinas[i].Codigo)}");
+            }
+
+            Console.ReadKey();
+            VoltarMenu();
+        }
+
+        /// <summary>
+        /// Retorna a nota do aluno utilizando como parâmetros os códigos de aluno e disciplina a qual a nota é de interesse. Caso não hajam notas inseridas na disciplina, retorna um "-"
+        /// </summary>
+        /// <param name="codAluno">Código do aluno, da struct Aluno</param>
+        /// <param name="codDisciplina">Código da Disciplina, da struct Disciplina</param>
+        /// <returns></returns>
+        static string NotaConsultada(int codAluno, int codDisciplina)
+        {
+            for (int x = 0; x < qtdNota; x++)
+            {
+                if (Notas[x].CodAluno == codAluno && Notas[x].CodDisciplina == codDisciplina)
+                {
+                    return Notas[x].NotaAluno.ToString();
+                }
+            }
+            return "-";
+
+        }
+
+        #endregion
+
+        static void ConsultarSituação()
+        {
+            ConsoleColor cor = Console.ForegroundColor;
+            double soma;
+
+            for (int x = 0; x < qtdAluno; x++)
+            {
+                soma = 0;
+
+                for (int j = 0; j < qtdNota; j++)
+                {
+                    if (Alunos[x].Codigo == Notas[j].CodAluno)
+                        soma += Notas[j].NotaAluno;
+                }
+
+                Alunos[x].media = soma / qtdDisciplina;
+            }
+
+
+            for (int i = 0; i < qtdAluno; i++)
+            {
+                if (Alunos[i].media >= 5)
+                    Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} - Aprovado");
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} - Reprovado");
+                    Console.ForegroundColor = cor;
+                }
+            }
+
+            Console.ReadKey();
+            VoltarMenu();
+        }
 
 
 
