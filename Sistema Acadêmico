@@ -94,6 +94,7 @@ namespace N1
                     LancarNotas();
                     break;
                 case 5:
+                    AlterarNota();
                     break;
                 case 6:
                     // Sair
@@ -268,7 +269,8 @@ namespace N1
                 } while (true);
             }
 
-
+            Salvar();
+            VoltarMenu();
             Console.ReadKey();
         }
 
@@ -283,9 +285,54 @@ namespace N1
             return "NTaCadastrado";
         }
 
-
-
         #endregion
+        static void AlterarNota()
+        {
+            int respCodAluno = 0;
+            int respCodDisciplina = 0;
+            int posicaoAluno = 0;
+            int codDisciplina = 0;
+
+            for (int i = 0; i < qtdAluno; i++)
+                Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} ");
+
+            Console.Write("Digite o código do aluno: ");
+            respCodAluno = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < qtdAluno; i++)
+            {
+                if (Alunos[i].Codigo == respCodAluno)
+                    posicaoAluno = i;
+            }
+
+            for (int x = 0; x < qtdDisciplina; x++)
+                Console.WriteLine($"{Disciplinas[x].Codigo} - {Disciplinas[x].Nome} ");
+
+            Console.Write("Digite o código da disciplina: ");
+            respCodDisciplina = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < qtdDisciplina; i++)
+            {
+                if (Disciplinas[i].Codigo == respCodDisciplina)
+                    codDisciplina = respCodDisciplina;
+            }
+
+            if (VerificarExistenciaNota(posicaoAluno, codDisciplina) == "JaTaCadastrado")
+            {
+                Console.WriteLine("Digite a nota");
+                Notas[posicaoAluno].NotaAluno = double.Parse(Console.ReadLine());
+                Salvar();
+                VoltarMenu();
+            }
+            else
+            {
+                Console.WriteLine("A nota ainda não foi cadastrada");
+                VoltarMenu();
+            }
+        }    
+
+
+      
 
         #region Método Cadastro de Disciplinas
         static void CadastrarDisciplinas() //cadastra a disciplina PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
