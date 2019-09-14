@@ -64,7 +64,7 @@ namespace N1
             Console.Clear();
             Console.Write("--- SISTEMA DE DIGITAÇÃO DE NOTAS --- \n\nBem vindo! Digite uma opção: " +
                 "\n\n(1) Desenvolvedores \n(2) Cadastro de Disciplinas \n(3) Cadastro de alunos \n(4) Lançamento de notas por disciplina" +
-                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Desenvolvedores \n9 Sair");
+                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Desenvolvedores \n(9) Sair");
 
             do
             {
@@ -423,10 +423,10 @@ namespace N1
         static void Desenvolvedores()
         {
             Console.WriteLine("081190015 - Lucas Santos Costa : Escrever dps oq fiz " +
-                "\n 0811900(complete) - Roger Complete : Escrever dps oq fez");
+                "\n0811900(complete) - Roger Complete : Escrever dps oq fez");
 
             Console.WriteLine("Oquê foi feito: \nExibir desenvolvedores \nCadastro de disciplinas \nCadastro de alunos \nLançamento de notas por disciplina " +
-                "\nAlteração de nota do aluno \nConsulta de notas por aluno \nConsulta de notas por disciplina \n Mapa de nota(loading) \nConsulta de situação" +
+                "\nAlteração de nota do aluno \nConsulta de notas por aluno \nConsulta de notas por disciplina \nMapa de notas(loading) \nConsulta de situação" +
                 "\nComplexidade ciclomática <= 9 pontos(Loading) ");
         }
 
