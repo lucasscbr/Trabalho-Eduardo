@@ -64,7 +64,7 @@ namespace N1
             Console.Clear();
             Console.Write("--- SISTEMA DE DIGITAÇÃO DE NOTAS --- \n\nBem vindo! Digite uma opção: " +
                 "\n\n(1) Desenvolvedores \n(2) Cadastro de Disciplinas \n(3) Cadastro de alunos \n(4) Lançamento de notas por disciplina" +
-                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Desenvolvedores \n(9) Sair");
+                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Sair");
 
             do
             {
@@ -77,13 +77,14 @@ namespace N1
                 }
                 catch
                 {
-                    Console.WriteLine("\nERRO: Por favor, digite somente números de 1 a 6 para selecionar uma opção\n");
+                    Console.WriteLine("\nERRO: Por favor, digite somente números de 1 a 8 para selecionar uma opção\n");
                 }
             } while (true);
 
             switch (opcao)
             {
                 case 1:
+                    Desenvolvedores();
                     break;
                 case 2:
                     CadastrarDisciplinas();
@@ -104,19 +105,14 @@ namespace N1
                     ConsultarSituação();
                     break;
                 case 8:
-                    Desenvolvedores();
-                    break;
-                case 9:
+                    //Sair
                     break;
             }
         }
         #endregion
 
 
-
-        #region Método Lançar Notas
-        // Lançamento de notas
-        static void LancarNotas()
+        static int lançarNotasEncontrarDisciplina()
         {
             int codBuscar;
             int disciplinaEncontrada = 0;
@@ -158,7 +154,17 @@ namespace N1
                 }
             } while (true);
 
-            Console.Write($"\n\nDisciplina escolhida: {disciplinaEncontrada}\n\n");
+            return disciplinaEncontrada;
+        }
+
+        #region Método Lançar Notas
+        // Lançamento de notas
+        static void LancarNotas()
+        {
+            int encontrada ;
+            encontrada = lançarNotasEncontrarDisciplina();
+
+            Console.Write($"\n\nDisciplina escolhida: {encontrada}\n\n");
 
             for (int i = 0; i < qtdAluno; i++)
             {
@@ -167,14 +173,14 @@ namespace N1
 
                     try
                     {
-                        if (VerificarExistenciaNota(i, disciplinaEncontrada) == "NTaCadastrado")
+                        if (VerificarExistenciaNota(i, encontrada) == "NTaCadastrado")
                         {
                             Console.Write($"{Alunos[i].Codigo} - {Alunos[i].Nome} \nDigite uma nota para este aluno entre (0/10): ");
                             double nota = int.Parse(Console.ReadLine());
                             if (nota >= 0 && nota <= 10)
                             {
                                 Notas[qtdNota].CodAluno = Alunos[i].Codigo;
-                                Notas[qtdNota].CodDisciplina = disciplinaEncontrada;
+                                Notas[qtdNota].CodDisciplina = encontrada;
                                 Notas[qtdNota].NotaAluno = nota;
 
                                 qtdNota++;
@@ -428,6 +434,10 @@ namespace N1
             Console.WriteLine("Oquê foi feito: \nExibir desenvolvedores \nCadastro de disciplinas \nCadastro de alunos \nLançamento de notas por disciplina " +
                 "\nAlteração de nota do aluno \nConsulta de notas por aluno \nConsulta de notas por disciplina \nMapa de notas(loading) \nConsulta de situação" +
                 "\nComplexidade ciclomática <= 9 pontos(Loading) ");
+
+            Console.WriteLine("PRECIONE QUALQUER TECLA PARA VOLTAR.");
+            Console.ReadKey();
+            VoltarMenu();
         }
 
 
@@ -465,12 +475,7 @@ namespace N1
                         try  //tente
                         {
                             Console.Write($"Digite um Código para a disciplina({i + 1}) (Maior que 0): ");
-                            Disciplinas[i].Codigo = Convert.ToInt16(Console.ReadLine().Trim()); //CUIDADO ELE CORTA OS 0 TB
-
-                            for (int x = 0; x < qtdDisciplina; x++)
-                            {
-                                Console.WriteLine("O código inserido já existe");
-                            }
+                            Disciplinas[i].Codigo = Convert.ToInt16(Console.ReadLine().Trim());
 
                             break;
                         }
