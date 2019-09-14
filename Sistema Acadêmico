@@ -36,7 +36,7 @@ namespace N1
         static Disciplina[] Disciplinas = new Disciplina[5]; //vetor disciplina de no max 5 disciplinas
         static Aluno[] Alunos = new Aluno[40]; //vetor Aluno de no max 40 Alunos
         static Nota[] Notas = new Nota[200]; //vetor Nota de no max 40 Alunos
-        static int qtdeD = 0, qtdeA = 0, qtdeN = 0;
+
         #endregion
 
         const string nomeArquivo = "dadosSalvos.txt";
@@ -64,7 +64,7 @@ namespace N1
             Console.Clear();
             Console.Write("--- SISTEMA DE DIGITAÇÃO DE NOTAS --- \n\nBem vindo! Digite uma opção: " +
                 "\n\n(1) Desenvolvedores \n(2) Cadastro de Disciplinas \n(3) Cadastro de alunos \n(4) Lançamento de notas por disciplina" +
-                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Sair");
+                "\n(5) Alteração de nota do aluno \n(6) Consultar Notas \n(7) Consultar Situação \n(8) Desenvolvedores \n9 Sair");
 
             do
             {
@@ -104,94 +104,15 @@ namespace N1
                     ConsultarSituação();
                     break;
                 case 8:
+                    Desenvolvedores();
+                    break;
+                case 9:
                     break;
             }
         }
         #endregion
 
-        #region Lançar Notas
-        //Lançar notas de acordo com a disciplina
-        static void LançarNotasDisciplina()
-        {
-            string disciplinaEncontrada = "", conteudos = "";
-            double Nota;
-            bool verificador;
-            int resposta = 0;
 
-            Console.WriteLine("Dados carregados do arquivo:");
-
-            if (File.Exists("Disciplinas.txt"))
-            {
-
-                for (int n = 0; n < qtdeD; n++)
-                    Console.WriteLine($"{Disciplinas[n].Codigo} - {Disciplinas[n].Nome} - {Disciplinas[n].Sigla}");
-
-                do
-                {
-                    verificador = false;
-                    try
-                    {
-                        Console.WriteLine("Digite o código de uma disciplina: ");
-                        resposta = Convert.ToInt16(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Digite apenas números inteiros! ");
-                        verificador = true;
-                    }
-
-                    for (int x = 0; x < qtdeD; x++)
-                    {
-                        if (resposta == Disciplinas[x].Codigo)
-                        {
-                            disciplinaEncontrada = Disciplinas[x].Nome;
-                            verificador = false;
-                            break;
-                        }
-
-                        else
-                            verificador = true;
-                    }
-
-                } while (verificador == true);
-
-
-                for (int i = qtdeN; i < qtdeA; i++)
-                {
-                    do
-                    {
-                        //conteudos = CarregarNotas(conteudo);
-
-                        verificador = false;
-                        try
-                        {
-                            Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} \nDigite uma nota para este aluno entre (0/10)");
-                            Nota = Convert.ToDouble(Console.ReadLine());
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Digite apenas números inteiros ou decimais!");
-                            Nota = -1;
-                        }
-
-                        if (Nota >= 0 && Nota <= 10)
-                        {
-                            qtdeN++;
-                            Console.WriteLine("Nota Cadastrada");
-                            conteudos = conteudos + disciplinaEncontrada + "|" + Alunos[i].Nome + "|" + Nota + Environment.NewLine;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Nota inválida tente novamente");
-                            verificador = true;
-                        }
-                    } while (verificador == true);
-
-                    File.WriteAllText("Notas.txt", conteudos, Encoding.UTF8);
-                }
-            }
-        }
-        #endregion
 
         #region Método Lançar Notas
         // Lançamento de notas
@@ -497,6 +418,16 @@ namespace N1
 
             Console.ReadKey();
             VoltarMenu();
+        }
+
+        static void Desenvolvedores()
+        {
+            Console.WriteLine("081190015 - Lucas Santos Costa : Escrever dps oq fiz " +
+                "\n 0811900(complete) - Roger Complete : Escrever dps oq fez");
+
+            Console.WriteLine("Oquê foi feito: \nExibir desenvolvedores \nCadastro de disciplinas \nCadastro de alunos \nLançamento de notas por disciplina " +
+                "\nAlteração de nota do aluno \nConsulta de notas por aluno \nConsulta de notas por disciplina \n Mapa de nota(loading) \nConsulta de situação" +
+                "\nComplexidade ciclomática <= 9 pontos(Loading) ");
         }
 
 
