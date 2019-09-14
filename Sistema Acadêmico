@@ -24,7 +24,7 @@ namespace N1
 
         struct Nota
         {
-            public int CodDisciplina ;
+            public int CodDisciplina;
             public int CodAluno;
             public double NotaAluno;
         }
@@ -107,7 +107,7 @@ namespace N1
         //Lançar notas de acordo com a disciplina
         static void LançarNotasDisciplina()
         {
-            string conteudo = "", disciplinaEncontrada = "", conteudos = "";
+            string disciplinaEncontrada = "", conteudos = "";
             double Nota;
             bool verificador;
             int resposta = 0;
@@ -285,19 +285,30 @@ namespace N1
             return "NTaCadastrado";
         }
 
-        #endregion
-        static void AlterarNota()
+        static int VerificarIgualdadeCodigoAluno()
         {
             int respCodAluno = 0;
-            int respCodDisciplina = 0;
+            bool verificador = false;
             int posicaoAluno = 0;
-            int codDisciplina = 0;
 
             for (int i = 0; i < qtdAluno; i++)
                 Console.WriteLine($"{Alunos[i].Codigo} - {Alunos[i].Nome} ");
 
-            Console.Write("Digite o código do aluno: ");
-            respCodAluno = int.Parse(Console.ReadLine());
+            do
+            {
+                verificador = false;
+                try
+                {
+                    Console.Write("Digite o código do aluno: ");
+                    respCodAluno = int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Por favor digite apenas numeros inteiros");
+                    verificador = true;
+                }
+
+            } while (verificador == true);
 
             for (int i = 0; i < qtdAluno; i++)
             {
@@ -305,17 +316,50 @@ namespace N1
                     posicaoAluno = i;
             }
 
+            return posicaoAluno;
+
+        }
+
+        static int VerificarIgualdadeCodigoDisciplina()
+        {
+            int respCodDisciplina = 0;
+            int codDisciplina = 0;
+            bool verificador = false;
+
             for (int x = 0; x < qtdDisciplina; x++)
                 Console.WriteLine($"{Disciplinas[x].Codigo} - {Disciplinas[x].Nome} ");
 
-            Console.Write("Digite o código da disciplina: ");
-            respCodDisciplina = int.Parse(Console.ReadLine());
+            do
+            {
+                verificador = false;
+                try
+                {
+                    Console.Write("Digite o código da disciplina: ");
+                    respCodDisciplina = int.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Por favor digite apenas numeros inteiros");
+                    verificador = true;
+                }
+
+            } while (verificador == true);
 
             for (int i = 0; i < qtdDisciplina; i++)
             {
                 if (Disciplinas[i].Codigo == respCodDisciplina)
                     codDisciplina = respCodDisciplina;
             }
+
+            return codDisciplina;
+        }
+
+        #endregion
+        static void AlterarNota()
+        {
+            int posicaoAluno, codDisciplina;
+            posicaoAluno = VerificarIgualdadeCodigoAluno();
+            codDisciplina = VerificarIgualdadeCodigoDisciplina();
 
             if (VerificarExistenciaNota(posicaoAluno, codDisciplina) == "JaTaCadastrado")
             {
@@ -329,10 +373,11 @@ namespace N1
                 Console.WriteLine("A nota ainda não foi cadastrada");
                 VoltarMenu();
             }
-        }    
+
+        }
 
 
-      
+
 
         #region Método Cadastro de Disciplinas
         static void CadastrarDisciplinas() //cadastra a disciplina PS: Deichei Void pq por enquanto n estamos usando isso pra nada.
